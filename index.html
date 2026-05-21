@@ -3,322 +3,263 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LINGUA — Nasim's Language Studio</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="LINGUA">
-
+<title>LINGUA — Language Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&family=Noto+Sans+SC:wght@300;400&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#0f0e17;
-  --sur:#1a1828;
-  --sur2:#221f35;
-  --bor:#2e2a45;
-  --bor2:#3d3860;
-  --es:#f4a261;
-  --zh:#e76f51;
-  --es2:#ffd166;
-  --zh2:#ff6b9d;
-  --accent3:#06d6a0;
-  --tx:#f0eeff;
-  --txm:#9d98c0;
-  --txd:#4a4570;
-  --txs:#c8c3e8;
-  --ok:#06d6a0;
-  --mono:Menlo,Monaco,Consolas,'Courier New',monospace;
-  --serif:Georgia,'Times New Roman',serif;
+:root {
+  --bg:#0e0e0e; --sur:#151515; --sur2:#1c1c1c; --bor:#2a2a2a;
+  --es:#c9a96e; --zh:#e05c5c; --lv:#6aab8e;
+  --tx:#e8e4dc; --txm:#6b6b6b; --txd:#3a3a3a;
+  --serif:'Cormorant Garamond',serif;
+  --mono:'JetBrains Mono',monospace;
+  --zhfont:'Noto Sans SC',sans-serif;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bg);color:var(--tx);font-family:var(--mono);font-size:13px;height:100vh;overflow:hidden;}
-#app{display:grid;grid-template-columns:240px 1fr;grid-template-rows:50px 1fr;height:100vh;}
+
+/* LAYOUT */
+#app{display:grid;grid-template-columns:250px 1fr;grid-template-rows:52px 1fr;height:100vh;}
+
 /* HEADER */
-.hdr{grid-column:1/-1;border-bottom:1px solid var(--bor);display:flex;align-items:center;justify-content:space-between;padding:0 22px;background:var(--bg);}
-.logo{font-family:var(--serif);font-size:18px;font-weight:300;letter-spacing:.12em;color:var(--tx);}
+.hdr{grid-column:1/-1;border-bottom:1px solid var(--bor);display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:var(--bg);gap:12px;}
+.logo{font-family:var(--serif);font-size:19px;font-weight:300;letter-spacing:.12em;white-space:nowrap;}
 .logo em{color:var(--txm);font-style:italic;}
-.hdr-r{display:flex;align-items:center;gap:8px;}
-.tbtn{padding:4px 11px;border:1px solid var(--bor);background:transparent;color:var(--txm);font-family:var(--mono);font-size:10px;letter-spacing:.08em;cursor:pointer;transition:all .15s;border-radius:3px;}
-.tbtn:hover{border-color:var(--txs);color:var(--tx);background:var(--sur);}
-.tbtn.aes{border-color:var(--es);color:var(--es);background:rgba(244,162,97,.12);}
-.tbtn.azh{border-color:var(--zh2);color:var(--zh2);background:rgba(255,107,157,.12);}
-.tbtn.alv{border-color:var(--accent3);color:var(--accent3);background:rgba(6,214,160,.1);}
-.sep{width:1px;height:14px;background:var(--bor);}
+.hdr-controls{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.sep{width:1px;height:20px;background:var(--bor);}
+
+/* BUTTONS */
+.btn{padding:4px 10px;border:1px solid var(--bor);background:transparent;color:var(--txm);font-family:var(--mono);font-size:10px;letter-spacing:.08em;cursor:pointer;transition:all .15s;}
+.btn:hover{border-color:var(--txm);color:var(--tx);}
+.btn.on-es{border-color:var(--es);color:var(--es);background:rgba(201,169,110,.08);}
+.btn.on-zh{border-color:var(--zh);color:var(--zh);background:rgba(224,92,92,.08);}
+.btn.on-lv{border-color:var(--lv);color:var(--lv);background:rgba(106,171,142,.08);}
+
+/* HAMBURGER — mobile only */
+.hbg{display:none;background:none;border:none;color:var(--txm);font-size:18px;cursor:pointer;padding:4px 8px;line-height:1;}
+
 /* SIDEBAR */
-.sidebar{border-right:1px solid var(--bor);overflow-y:auto;padding:14px 0;background:var(--sur);}
-.sidebar::-webkit-scrollbar{width:2px;}.sidebar::-webkit-scrollbar-thumb{background:var(--bor2);}
-.s-sec{padding:0 10px;margin-bottom:18px;}
+.sidebar{border-right:1px solid var(--bor);overflow-y:auto;padding:16px 0;background:var(--sur);}
+.sidebar::-webkit-scrollbar{width:2px;}
+.sidebar::-webkit-scrollbar-thumb{background:var(--bor);}
+.s-sec{padding:0 12px;margin-bottom:20px;}
 .s-lbl{font-size:9px;letter-spacing:.2em;color:var(--txd);text-transform:uppercase;margin-bottom:6px;padding:0 4px;}
-.s-btn{display:flex;align-items:center;gap:7px;width:100%;padding:7px 8px;background:transparent;border:none;color:var(--txm);font-family:var(--mono);font-size:10px;cursor:pointer;text-align:left;border-radius:4px;transition:all .1s;white-space:nowrap;}
-.s-btn:hover{background:var(--sur2);color:var(--txs);}
-.s-btn.on{background:var(--sur2);color:var(--tx);border-left:2px solid var(--es);padding-left:6px;}
-.zh .s-btn.on{border-left-color:var(--zh2);}
+.s-btn{display:flex;align-items:center;gap:8px;width:100%;padding:7px 8px;background:transparent;border:none;color:var(--txm);font-family:var(--mono);font-size:11px;cursor:pointer;text-align:left;border-radius:2px;transition:all .12s;}
+.s-btn:hover{background:var(--sur2);color:var(--tx);}
+.s-btn.on{background:var(--sur2);color:var(--tx);}
 .s-btn.on .dot{background:var(--es);}
-.zh .s-btn.on .dot{background:var(--zh2);}
-.dot{width:5px;height:5px;border-radius:50%;background:var(--bor2);flex-shrink:0;transition:background .15s;}
-.si{font-size:13px;width:18px;flex-shrink:0;}
+.zh .s-btn.on .dot{background:var(--zh);}
+.dot{width:4px;height:4px;border-radius:50%;background:var(--txd);flex-shrink:0;}
+.s-icon{font-size:13px;flex-shrink:0;}
+
 /* MAIN */
 .main{overflow-y:auto;background:var(--bg);}
-.main::-webkit-scrollbar{width:3px;}.main::-webkit-scrollbar-thumb{background:var(--bor2);border-radius:2px;}
+.main::-webkit-scrollbar{width:2px;}
+.main::-webkit-scrollbar-thumb{background:var(--bor);}
+
 /* WELCOME */
 .welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:40px;text-align:center;}
-.w-t{font-family:var(--serif);font-size:48px;font-weight:300;letter-spacing:.1em;line-height:1.1;margin-bottom:14px;background:linear-gradient(135deg,var(--es) 0%,var(--zh2) 60%,var(--accent3) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.w-s{color:var(--txs);font-size:11px;letter-spacing:.06em;max-width:360px;line-height:1.9;margin-bottom:32px;}
-.w-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:600px;text-align:left;}
-.w-card{background:var(--sur);border:1px solid var(--bor);padding:14px;border-radius:6px;}
-.w-ct{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--es);margin-bottom:7px;}
-.w-cx{font-size:11px;color:var(--txs);line-height:1.7;}
-/* API KEY BANNER */
-.key-banner{background:var(--sur);border:1px solid var(--bor);padding:14px 18px;margin:20px 28px 0;display:flex;align-items:center;gap:12px;border-radius:6px;}
-.key-banner input{flex:1;background:var(--sur2);border:1px solid var(--bor);color:var(--tx);font-family:var(--mono);font-size:11px;padding:7px 10px;outline:none;border-radius:3px;}
-.key-banner input:focus{border-color:var(--es);}
-.key-banner input::placeholder{color:var(--txd);}
-.key-banner button{padding:7px 14px;background:var(--es);border:none;color:#0f0e17;font-family:var(--mono);font-size:10px;font-weight:700;cursor:pointer;letter-spacing:.06em;border-radius:3px;}
-.key-note{font-size:10px;color:var(--txm);margin:8px 28px 0;line-height:1.6;}
+.w-t{font-family:var(--serif);font-size:52px;font-weight:300;letter-spacing:.08em;margin-bottom:14px;line-height:1.1;}
+.w-s{color:var(--txm);font-size:11px;letter-spacing:.08em;max-width:400px;line-height:1.9;margin-bottom:36px;}
+.w-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:640px;text-align:left;}
+.w-card{background:var(--sur);border:1px solid var(--bor);padding:18px;}
+.w-card-t{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--es);margin-bottom:8px;}
+.w-card-t.zh{color:var(--zh);}
+.w-card-b{font-size:11px;color:var(--txm);line-height:1.7;}
+
 /* PANEL */
-.panel{padding:22px 32px 50px;}
-.p-hdr{display:flex;align-items:baseline;gap:12px;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--bor);}
-.p-title{font-family:var(--serif);font-size:28px;font-weight:300;color:var(--tx);}
-.p-meta{color:var(--txm);font-size:10px;letter-spacing:.08em;}
+.panel{padding:32px 40px 60px;max-width:800px;}
+.p-hdr{display:flex;align-items:baseline;gap:14px;margin-bottom:28px;border-bottom:1px solid var(--bor);padding-bottom:18px;}
+.p-title{font-family:var(--serif);font-size:30px;font-weight:300;letter-spacing:.04em;}
+.p-meta{color:var(--txm);font-size:10px;letter-spacing:.1em;}
+
 /* TABS */
-.tabs{display:flex;margin-bottom:20px;border-bottom:1px solid var(--bor);gap:2px;}
-.tab{padding:7px 16px;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--txm);font-family:var(--mono);font-size:10px;letter-spacing:.07em;cursor:pointer;margin-bottom:-1px;transition:all .12s;border-radius:4px 4px 0 0;}
-.tab:hover{color:var(--txs);background:var(--sur);}
-.tab.on{color:var(--es);border-bottom-color:var(--es);background:var(--sur);}
-.zh .tab.on{color:var(--zh2);border-bottom-color:var(--zh2);}
+.tabs{display:flex;margin-bottom:24px;border-bottom:1px solid var(--bor);}
+.tab{padding:7px 16px;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--txm);font-family:var(--mono);font-size:10px;letter-spacing:.08em;cursor:pointer;margin-bottom:-1px;transition:all .15s;}
+.tab:hover{color:var(--tx);}
+.tab.on{color:var(--es);border-bottom-color:var(--es);}
+.zh .tab.on{color:var(--zh);border-bottom-color:var(--zh);}
+
 /* TAB CONTENT */
-.tc{display:none;}.tc.vis{display:block;}
+.tc{display:none;}
+.tc.vis{display:block;}
+
 /* VOCAB */
-.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px;margin-bottom:14px;}
-.vc{background:var(--sur);border:1px solid var(--bor);padding:13px 14px;cursor:pointer;transition:all .15s;position:relative;border-radius:6px;}
-.vc:hover{border-color:var(--es);background:var(--sur2);transform:translateY(-1px);box-shadow:0 4px 16px rgba(244,162,97,.15);}
-.zh .vc:hover{border-color:var(--zh2);box-shadow:0 4px 16px rgba(255,107,157,.15);}
-.vw{font-family:var(--serif);font-size:17px;display:block;margin-bottom:3px;color:var(--tx);}
-.vpy{font-size:10px;color:var(--zh2);opacity:.85;display:block;margin-bottom:3px;font-weight:500;}
-.vtr{font-size:11px;color:var(--txs);opacity:0;transition:opacity .15s;display:block;}
-.vc:hover .vtr{opacity:1;}
-.v-spk{position:absolute;top:8px;right:9px;font-size:10px;opacity:0;color:var(--es);}
-.vc:hover .v-spk{opacity:.7;}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-bottom:24px;}
+.vc{background:var(--sur);border:1px solid var(--bor);padding:12px 14px;cursor:pointer;transition:border-color .15s;}
+.vc:hover{border-color:var(--es);}
+.zh .vc:hover{border-color:var(--zh);}
+.vw{font-family:var(--serif);font-size:17px;display:block;margin-bottom:3px;}
+.vpy{font-size:9px;color:var(--zh);opacity:.7;display:block;margin-bottom:2px;}
+.vt{font-size:10px;color:var(--txm);opacity:0;transition:opacity .15s;}
+.vc:hover .vt{opacity:1;}
+
 /* PHRASES */
-.ph{background:var(--sur);border:1px solid var(--bor);border-left:3px solid var(--es);padding:13px 16px;margin-bottom:8px;cursor:pointer;transition:all .12s;border-radius:0 6px 6px 0;}
-.zh .ph{border-left-color:var(--zh2);}
-.ph:hover{background:var(--sur2);border-color:var(--bor2);border-left-color:var(--es);}
-.zh .ph:hover{border-left-color:var(--zh2);}
-.php{font-family:var(--serif);font-size:16px;display:block;margin-bottom:3px;color:var(--tx);}
-.phpy{font-size:10px;color:var(--zh2);opacity:.85;display:block;margin-bottom:3px;font-weight:500;}
-.pht{font-size:11px;color:var(--txs);display:block;margin-bottom:5px;}
-.phc{font-size:10px;color:var(--txm);letter-spacing:.02em;font-style:italic;}
+.pb{background:var(--sur);border:1px solid var(--bor);border-left:3px solid var(--es);padding:14px 18px;margin-bottom:8px;cursor:pointer;transition:background .12s;}
+.zh .pb{border-left-color:var(--zh);}
+.pb:hover{background:var(--sur2);}
+.pp{font-family:var(--serif);font-size:16px;display:block;margin-bottom:2px;}
+.ppy{font-size:9px;color:var(--zh);opacity:.6;display:block;margin-bottom:3px;}
+.pt{font-size:10px;color:var(--txm);display:block;margin-bottom:4px;}
+.pc{font-size:9px;color:var(--txd);font-style:italic;}
+
 /* DIALOGUES */
-.dlg{background:var(--sur);border:1px solid var(--bor);padding:18px;margin-bottom:12px;border-radius:8px;}
-.dlgn{font-size:9px;letter-spacing:.16em;color:var(--txd);margin-bottom:8px;text-transform:uppercase;}
-.dlgs{font-size:11px;color:var(--txs);margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--bor);line-height:1.65;}
-.dlgline{display:grid;grid-template-columns:66px 1fr;gap:8px;margin-bottom:10px;}
-.dlgsp{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--txd);padding-top:3px;}
-.dlgsp.you{color:var(--es);font-weight:600;}
-.zh .dlgsp.you{color:var(--zh2);}
-.dlgtx{line-height:1.6;}
-.dlgm{font-family:var(--serif);font-size:15px;display:block;cursor:pointer;color:var(--tx);}
-.dlgm:hover{color:var(--es);}
-.zh .dlgm:hover{color:var(--zh2);}
-.dlgpy{font-size:10px;color:var(--zh2);opacity:.85;display:block;font-weight:500;}
-.dlgno{font-size:11px;color:var(--txs);display:block;margin-top:2px;}
-.dlg-btns{display:flex;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid var(--bor);}
-.dlg-btn{padding:4px 12px;background:transparent;border:1px solid var(--bor2);color:var(--txm);font-family:var(--mono);font-size:9px;cursor:pointer;transition:all .12s;border-radius:3px;}
-.dlg-btn:hover{border-color:var(--txs);color:var(--txs);}
-.dlg-btn.playing{border-color:var(--es);color:var(--es);background:rgba(244,162,97,.1);}
-.zh .dlg-btn.playing{border-color:var(--zh2);color:var(--zh2);background:rgba(255,107,157,.1);}
-/* PRACTICE */
-.chat-wrap{background:var(--sur);border:1px solid var(--bor);padding:20px;border-radius:8px;}
-.chat-lbl{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--txm);margin-bottom:14px;}
-.msgs{min-height:150px;max-height:280px;overflow-y:auto;margin-bottom:14px;display:flex;flex-direction:column;gap:8px;}
-.msgs::-webkit-scrollbar{width:2px;}.msgs::-webkit-scrollbar-thumb{background:var(--bor2);}
-.msg{padding:9px 12px;max-width:83%;font-size:11px;line-height:1.65;border-radius:6px;}
-.msg-ai{background:var(--sur2);border:1px solid var(--bor);align-self:flex-start;color:var(--txs);}
-.msg-user{background:rgba(244,162,97,.12);border:1px solid rgba(244,162,97,.3);align-self:flex-end;color:var(--tx);}
-.zh .msg-user{background:rgba(255,107,157,.12);border-color:rgba(255,107,157,.3);}
-.msg-sys{align-self:center;font-size:10px;color:var(--txm);background:none;border:none;padding:2px 0;}
-.msg-corr{background:rgba(6,214,160,.1);border:1px solid rgba(6,214,160,.3);align-self:flex-start;color:var(--ok);font-size:10px;padding:9px 12px;max-width:90%;border-radius:6px;}
-.no-key{font-size:11px;color:var(--txs);padding:16px;background:var(--sur2);border:1px solid var(--bor);border-radius:6px;line-height:1.7;}
-.chat-row{display:flex;gap:6px;}
-.chat-in{flex:1;background:var(--sur2);border:1px solid var(--bor);color:var(--tx);font-family:var(--mono);font-size:11px;padding:9px 12px;outline:none;transition:border-color .15s;border-radius:4px;}
-.chat-in:focus{border-color:var(--es);}
-.zh .chat-in:focus{border-color:var(--zh2);}
-.chat-in::placeholder{color:var(--txd);}
-.chat-go{padding:9px 16px;background:var(--es);border:none;color:#0f0e17;font-family:var(--mono);font-size:10px;font-weight:700;cursor:pointer;transition:all .15s;border-radius:4px;letter-spacing:.04em;}
-.zh .chat-go{background:var(--zh2);}
-.chat-go:hover{opacity:.85;transform:translateY(-1px);}
-.chat-go:disabled{opacity:.35;cursor:not-allowed;transform:none;}
-.chat-hint{font-size:10px;color:var(--txm);margin-top:9px;}
+.dlg{background:var(--sur);border:1px solid var(--bor);padding:20px;margin-bottom:16px;}
+.dlg-setup{font-size:10px;color:var(--txm);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--bor);line-height:1.7;}
+.dlg-line{display:grid;grid-template-columns:70px 1fr;gap:10px;margin-bottom:12px;align-items:start;}
+.dlg-sp{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--txd);padding-top:2px;}
+.dlg-sp.you{color:var(--es);}
+.zh .dlg-sp.you{color:var(--zh);}
+.dlg-txt .m{font-family:var(--serif);font-size:15px;display:block;}
+.dlg-txt .py{font-size:9px;color:var(--zh);opacity:.6;display:block;}
+.dlg-txt .n{font-size:10px;color:var(--txm);display:block;margin-top:1px;}
+
 /* TIPS */
 .tips{display:flex;flex-direction:column;gap:6px;}
-.tip{display:flex;gap:12px;padding:12px 14px;background:var(--sur);border:1px solid var(--bor);border-radius:6px;}
-.tipn{font-size:10px;color:var(--es);min-width:20px;padding-top:1px;font-weight:600;}
-.zh .tipn{color:var(--zh2);}
-.tipt{font-size:11px;color:var(--txs);line-height:1.75;}
-.tipt strong{color:var(--tx);font-weight:600;}
-.hint{font-size:10px;color:var(--txm);margin-top:8px;letter-spacing:.03em;}
-/* LOADING DOTS */
-.ldots{display:inline-flex;gap:4px;align-items:center;}
-.ld{width:5px;height:5px;border-radius:50%;background:var(--txm);animation:lp 1s ease-in-out infinite;}
-.ld.d-es{background:var(--es);}
-.ld.d-zh{background:var(--zh2);}
-.ld:nth-child(2){animation-delay:.2s}.ld:nth-child(3){animation-delay:.4s}
-@keyframes lp{0%,100%{opacity:.2;transform:scale(.7)}50%{opacity:1;transform:scale(1)}}
+.tip{display:flex;gap:12px;padding:10px 14px;background:var(--sur);border:1px solid var(--bor);}
+.tip-n{font-size:9px;color:var(--es);letter-spacing:.1em;min-width:20px;padding-top:1px;}
+.zh .tip-n{color:var(--zh);}
+.tip-t{font-size:11px;color:var(--txm);line-height:1.7;}
+.tip-t strong{color:var(--tx);font-weight:500;}
 
-/* ══ MOBILE ════════════════════════════════════════════════════════════════ */
-/* Hamburger — hidden on desktop, shown on mobile */
-.hbg{
-  display:none; background:none; border:none; color:var(--txm);
-  font-size:20px; line-height:1; cursor:pointer;
-  min-width:44px; min-height:44px;
-  align-items:center; justify-content:center;
-  -webkit-tap-highlight-color:transparent;
-  touch-action:manipulation;
-}
-.hbg:active{color:var(--tx);}
+/* PRACTICE */
+.prac{background:var(--sur);border:1px solid var(--bor);padding:20px;}
+.prac-title{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--txm);margin-bottom:14px;}
+.msgs{min-height:160px;max-height:300px;overflow-y:auto;margin-bottom:14px;display:flex;flex-direction:column;gap:10px;}
+.msgs::-webkit-scrollbar{width:2px;}
+.msg{padding:8px 12px;max-width:85%;font-size:11px;line-height:1.6;}
+.msg-ai{background:var(--sur2);border:1px solid var(--bor);align-self:flex-start;}
+.msg-usr{background:rgba(201,169,110,.1);border:1px solid rgba(201,169,110,.25);align-self:flex-end;}
+.zh .msg-usr{background:rgba(224,92,92,.1);border-color:rgba(224,92,92,.25);}
+.msg-sys{align-self:center;font-size:9px;color:var(--txd);letter-spacing:.05em;background:none;border:none;padding:2px 0;}
+.msg-fix{background:rgba(106,171,142,.08);border:1px solid rgba(106,171,142,.3);align-self:flex-start;color:#6aab8e;font-size:10px;}
+.inp-row{display:flex;gap:6px;}
+.inp{flex:1;background:var(--sur2);border:1px solid var(--bor);color:var(--tx);font-family:var(--mono);font-size:11px;padding:8px 12px;outline:none;transition:border-color .15s;}
+.inp:focus{border-color:var(--es);}
+.zh .inp:focus{border-color:var(--zh);}
+.send-btn{padding:8px 16px;background:var(--es);border:none;color:var(--bg);font-family:var(--mono);font-size:10px;cursor:pointer;transition:opacity .15s;}
+.zh .send-btn{background:var(--zh);}
+.send-btn:hover{opacity:.85;}
+.send-btn:disabled{opacity:.4;cursor:not-allowed;}
+.prac-hint{font-size:9px;color:var(--txd);margin-top:8px;letter-spacing:.04em;}
+.ldots{display:inline-flex;gap:3px;align-items:center;padding:4px 0;}
+.ldot{width:3px;height:3px;border-radius:50%;background:var(--txm);animation:pu 1s ease-in-out infinite;}
+.ldot:nth-child(2){animation-delay:.2s;}
+.ldot:nth-child(3){animation-delay:.4s;}
+@keyframes pu{0%,100%{opacity:.3;transform:scale(.8);}50%{opacity:1;transform:scale(1);}}
 
-/* Full-screen nav overlay (separate from sidebar grid element) */
-#mobnav{
-  display:none;
-  position:fixed; top:0; left:0; right:0; bottom:0;
-  z-index:9999;
-  background:var(--sur);
-  flex-direction:column;
-  overflow:hidden;
-}
+/* MOBILE OVERLAY */
+#mobnav{display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;background:var(--sur);flex-direction:column;overflow:hidden;}
 #mobnav.open{display:flex;}
-#mobnav-hdr{
-  display:flex; align-items:center; justify-content:space-between;
-  height:50px; padding:0 14px; flex-shrink:0;
-  border-bottom:1px solid var(--bor);
-  background:var(--sur);
-}
-#mobnav-hdr .logo{font-family:var(--serif);font-size:17px;font-weight:300;letter-spacing:.1em;}
-.mobnav-x{
-  display:flex; align-items:center; justify-content:center;
-  min-width:44px; min-height:44px;
-  background:none; border:none; color:var(--txm); font-size:22px;
-  cursor:pointer;
-  -webkit-tap-highlight-color:transparent; touch-action:manipulation;
-}
-.mobnav-x:active{color:var(--tx);}
-#mobnav-list{overflow-y:auto; -webkit-overflow-scrolling:touch; padding:8px 0 40px;}
-#mobnav-list .s-sec{padding:0 10px; margin-bottom:14px;}
-#mobnav-list .s-lbl{
-  font-size:9px; letter-spacing:.2em; color:var(--txd);
-  text-transform:uppercase; padding:0 4px; margin:10px 0 5px;
-}
-#mobnav-list .s-btn{
-  display:flex; align-items:center; gap:7px;
-  width:100%; min-height:44px; padding:8px;
-  background:transparent; border:none; color:var(--txm);
-  font-family:var(--mono); font-size:11px; cursor:pointer;
-  text-align:left; border-radius:4px;
-  -webkit-tap-highlight-color:transparent; touch-action:manipulation;
-}
-#mobnav-list .s-btn:active{background:var(--sur2); color:var(--tx);}
-#mobnav-list .s-btn.on{color:var(--tx); background:var(--sur2); border-left:2px solid var(--es); padding-left:6px;}
-#mobnav.zh #mobnav-list .s-btn.on{border-left-color:var(--zh2);}
-#mobnav-list .dot{width:5px;height:5px;border-radius:50%;background:var(--bor2);flex-shrink:0;}
-#mobnav-list .s-btn.on .dot{background:var(--es);}
-#mobnav.zh #mobnav-list .s-btn.on .dot{background:var(--zh2);}
-#mobnav-list .si{font-size:14px;width:20px;flex-shrink:0;}
+#mnhdr{display:flex;align-items:center;justify-content:space-between;height:52px;padding:0 16px;border-bottom:1px solid var(--bor);flex-shrink:0;}
+#mnhdr .logo{font-family:var(--serif);font-size:17px;font-weight:300;letter-spacing:.1em;}
+.mn-x{background:none;border:none;color:var(--txm);font-size:18px;cursor:pointer;min-width:40px;min-height:40px;display:flex;align-items:center;justify-content:center;}
+#mnlist{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 0 40px;}
 
-@media(max-width:700px){
-  #app{grid-template-columns:1fr !important;}
-  .hbg{display:flex;}
-  .sidebar{display:none !important;}
-  .panel{padding:16px 14px 60px;}
-  .p-hdr{flex-wrap:wrap;}
-  .p-title{font-size:22px;}
-  .vgrid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));}
-  .dlgline{grid-template-columns:52px 1fr;}
-  .tabs{gap:1px;}
-  .tab{padding:6px 10px;font-size:9px;touch-action:manipulation;}
-  .chat-wrap{padding:12px;}
-  .msgs{max-height:200px;}
-  button{touch-action:manipulation;}
+/* MOBILE RESPONSIVE */
+@media(max-width:680px){
+  #app{grid-template-columns:1fr;grid-template-rows:52px 1fr;}
+  .sidebar{display:none;}
+  .main{grid-column:1;grid-row:2;height:calc(100vh - 52px);overflow-y:auto;}
+  .hbg{display:flex;align-items:center;}
+  .panel{padding:20px 16px 60px;}
+  .w-cards{grid-template-columns:1fr;}
+  .w-t{font-size:36px;}
+  .vgrid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));}
+  .dlg-line{grid-template-columns:55px 1fr;}
+  .tab{padding:6px 10px;font-size:9px;}
+  .hdr-controls .sep{display:none;}
 }
 </style>
 </head>
 <body>
-<div id="app">
-<header class="hdr">
-  <span class="logo">LINGUA <em>/ studio</em></span>
-  <button class="hbg" id="hbg" aria-label="Menu">&#9776;</button>
-  <div class="hdr-r">
-    <div style="display:flex;gap:3px;">
-      <button class="tbtn alv" onclick="setLv('a2')" id="la2">A2</button>
-      <button class="tbtn" onclick="setLv('b1')" id="lb1">B1</button>
-      <button class="tbtn" onclick="setLv('b2')" id="lb2">B2+</button>
+<div id="app" class="">
+  <header class="hdr">
+    <button class="hbg" id="hbg">&#9776;</button>
+    <span class="logo">LINGUA <em>/ studio</em></span>
+    <div class="hdr-controls">
+      <button class="btn on-lv" id="btn-a2" onclick="setLv('a2')">A2</button>
+      <button class="btn" id="btn-b1" onclick="setLv('b1')">B1</button>
+      <button class="btn" id="btn-b2" onclick="setLv('b2')">B2+</button>
+      <div class="sep"></div>
+      <button class="btn on-es" id="btn-es" onclick="setLang('es')">ES</button>
+      <button class="btn" id="btn-zh" onclick="setLang('zh')">ZH</button>
     </div>
-    <div class="sep"></div>
-    <div style="display:flex;gap:3px;">
-      <button class="tbtn aes" onclick="setLang('es')" id="bes">ES</button>
-      <button class="tbtn" onclick="setLang('zh')" id="bzh">ZH</button>
-    </div>
-  </div>
-</header>
+  </header>
 
-<nav class="sidebar">
-  <div class="s-sec">
-    <div class="s-lbl">Daily Life</div>
-    <button class="s-btn" onclick="go('cafe')"><span class="si">☕</span><span class="dot"></span>Café</button>
-    <button class="s-btn" onclick="go('restaurant')"><span class="si">🍽</span><span class="dot"></span>Restaurant</button>
-    <button class="s-btn" onclick="go('grocery')"><span class="si">🛒</span><span class="dot"></span>Grocery</button>
-    <button class="s-btn" onclick="go('clothes')"><span class="si">👗</span><span class="dot"></span>Clothes Shop</button>
-    <button class="s-btn" onclick="go('cooking')"><span class="si">🔪</span><span class="dot"></span>Cooking</button>
-    <button class="s-btn" onclick="go('friends')"><span class="si">🤝</span><span class="dot"></span>Meeting Friends</button>
-  </div>
-  <div class="s-sec">
-    <div class="s-lbl">Wellness</div>
-    <button class="s-btn" onclick="go('nail')"><span class="si">💅</span><span class="dot"></span>Nail Salon</button>
-    <button class="s-btn" onclick="go('massage')"><span class="si">💆</span><span class="dot"></span>Massage</button>
-    <button class="s-btn" onclick="go('health')"><span class="si">🏥</span><span class="dot"></span>Health / Doctor</button>
-  </div>
-  <div class="s-sec">
-    <div class="s-lbl">Home & City</div>
-    <button class="s-btn" onclick="go('apartment')"><span class="si">🏠</span><span class="dot"></span>Apartment Hunting</button>
-    <button class="s-btn" onclick="go('landlord')"><span class="si">🔧</span><span class="dot"></span>Talking to Landlord</button>
-    <button class="s-btn" onclick="go('directions')"><span class="si">🗺</span><span class="dot"></span>Directions</button>
-    <button class="s-btn" onclick="go('driving')"><span class="si">🚗</span><span class="dot"></span>Driving / Car</button>
-    <button class="s-btn" onclick="go('taxi')"><span class="si">🚕</span><span class="dot"></span>Taxi / Cab</button>
-  </div>
-  <div class="s-sec">
-    <div class="s-lbl">Travel</div>
-    <button class="s-btn" onclick="go('airport')"><span class="si">✈️</span><span class="dot"></span>Airport</button>
-    <button class="s-btn" onclick="go('hotel')"><span class="si">🏨</span><span class="dot"></span>Hotel</button>
-    <button class="s-btn" onclick="go('train')"><span class="si">🚄</span><span class="dot"></span>Train / Tickets</button>
-    <button class="s-btn" onclick="go('cinema')"><span class="si">🎬</span><span class="dot"></span>Cinema</button>
-    <button class="s-btn" onclick="go('weather')"><span class="si">🌤</span><span class="dot"></span>Weather</button>
-    <button class="s-btn" onclick="go('biztrip')"><span class="si">💼</span><span class="dot"></span>Business Trip</button>
-  </div>
-  <div class="s-sec">
-    <div class="s-lbl">Professional</div>
-    <button class="s-btn" onclick="go('office')"><span class="si">🖥</span><span class="dot"></span>Office</button>
-    <button class="s-btn" onclick="go('architecture')"><span class="si">📐</span><span class="dot"></span>Architecture Studio</button>
-    <button class="s-btn" onclick="go('design_class')"><span class="si">🎓</span><span class="dot"></span>Design Class</button>
-    <button class="s-btn" onclick="go('interior')"><span class="si">🛋</span><span class="dot"></span>Interior Design</button>
-  </div>
-  <div class="s-sec">
-    <div class="s-lbl">Civic</div>
-    <button class="s-btn" onclick="go('police')"><span class="si">🚔</span><span class="dot"></span>Police / Emergency</button>
-  </div>
-</nav>
-
-<main class="main" id="main">
-  <div class="welcome" id="welcome">
-    <div class="w-t">ES + 中文</div>
-    <div class="w-s">Your scenarios. Your vocabulary. Real language — no gamification, no abstract drills. Select a topic to begin.</div>
-    <div class="w-cards">
-      <div class="w-card"><div class="w-ct">Context-First</div><div class="w-cx">Every word anchored to a situation you already inhabit. Memory follows context.</div></div>
-      <div class="w-card"><div class="w-ct" style="color:var(--zh)">Phrase Chunks</div><div class="w-cx">Full expressions as units — the way fluent speakers carry language.</div></div>
-      <div class="w-card"><div class="w-ct">Live Practice</div><div class="w-cx">Add your API key once. AI stays inside your scenario and corrects in context.</div></div>
+  <nav class="sidebar" id="sidebar">
+    <div class="s-sec">
+      <div class="s-lbl">Daily Life</div>
+      <button class="s-btn" onclick="go('cafe')"><span class="s-icon">☕</span><span class="dot"></span>Café</button>
+      <button class="s-btn" onclick="go('restaurant')"><span class="s-icon">🍽</span><span class="dot"></span>Restaurant</button>
+      <button class="s-btn" onclick="go('grocery')"><span class="s-icon">🛒</span><span class="dot"></span>Grocery</button>
+      <button class="s-btn" onclick="go('clothes')"><span class="s-icon">👗</span><span class="dot"></span>Clothes Shop</button>
+      <button class="s-btn" onclick="go('cooking')"><span class="s-icon">🔪</span><span class="dot"></span>Cooking</button>
+      <button class="s-btn" onclick="go('friends')"><span class="s-icon">🤝</span><span class="dot"></span>Meeting Friends</button>
     </div>
-  </div>
-  <div id="panel-area" style="display:none;"></div>
-</main>
+    <div class="s-sec">
+      <div class="s-lbl">Wellness</div>
+      <button class="s-btn" onclick="go('nail')"><span class="s-icon">💅</span><span class="dot"></span>Nail Salon</button>
+      <button class="s-btn" onclick="go('massage')"><span class="s-icon">💆</span><span class="dot"></span>Massage</button>
+      <button class="s-btn" onclick="go('health')"><span class="s-icon">🏥</span><span class="dot"></span>Health / Doctor</button>
+    </div>
+    <div class="s-sec">
+      <div class="s-lbl">Home & City</div>
+      <button class="s-btn" onclick="go('apartment')"><span class="s-icon">🏠</span><span class="dot"></span>Apartment Hunting</button>
+      <button class="s-btn" onclick="go('landlord')"><span class="s-icon">🔑</span><span class="dot"></span>Talking to Landlord</button>
+      <button class="s-btn" onclick="go('directions')"><span class="s-icon">🗺</span><span class="dot"></span>Directions</button>
+      <button class="s-btn" onclick="go('driving')"><span class="s-icon">🚗</span><span class="dot"></span>Driving / Car</button>
+      <button class="s-btn" onclick="go('taxi')"><span class="s-icon">🚕</span><span class="dot"></span>Taxi</button>
+    </div>
+    <div class="s-sec">
+      <div class="s-lbl">Travel</div>
+      <button class="s-btn" onclick="go('airport')"><span class="s-icon">✈️</span><span class="dot"></span>Airport</button>
+      <button class="s-btn" onclick="go('hotel')"><span class="s-icon">🏨</span><span class="dot"></span>Hotel</button>
+      <button class="s-btn" onclick="go('train')"><span class="s-icon">🚄</span><span class="dot"></span>Train / Tickets</button>
+      <button class="s-btn" onclick="go('cinema')"><span class="s-icon">🎬</span><span class="dot"></span>Cinema</button>
+      <button class="s-btn" onclick="go('weather')"><span class="s-icon">🌤</span><span class="dot"></span>Weather</button>
+      <button class="s-btn" onclick="go('biztrip')"><span class="s-icon">💼</span><span class="dot"></span>Business Trip</button>
+    </div>
+    <div class="s-sec">
+      <div class="s-lbl">Professional</div>
+      <button class="s-btn" onclick="go('office')"><span class="s-icon">🖥</span><span class="dot"></span>Office</button>
+      <button class="s-btn" onclick="go('architecture')"><span class="s-icon">📐</span><span class="dot"></span>Architecture Studio</button>
+      <button class="s-btn" onclick="go('design_class')"><span class="s-icon">🎓</span><span class="dot"></span>Design Class</button>
+      <button class="s-btn" onclick="go('interior')"><span class="s-icon">🛋</span><span class="dot"></span>Interior Design</button>
+    </div>
+    <div class="s-sec">
+      <div class="s-lbl">Civic</div>
+      <button class="s-btn" onclick="go('police')"><span class="s-icon">🚔</span><span class="dot"></span>Police / Emergency</button>
+    </div>
+  </nav>
+
+  <main class="main" id="main">
+    <div id="welcome">
+      <div class="welcome">
+        <div class="w-t">ES <span style="color:var(--txm)">+</span> 中文</div>
+        <div class="w-s">Your scenarios. Your vocabulary. Real language — no gamification, no abstract drills. Select a topic to begin.</div>
+        <div class="w-cards">
+          <div class="w-card"><div class="w-card-t">Context-First</div><div class="w-card-b">Every word anchored to a situation you already inhabit. Memory follows context.</div></div>
+          <div class="w-card"><div class="w-card-t zh">Phrase Chunks</div><div class="w-card-b">Full expressions as units — the way fluent speakers carry language.</div></div>
+          <div class="w-card"><div class="w-card-t">Live Practice</div><div class="w-card-b">Add your API key once. AI stays inside your scenario and corrects in context.</div></div>
+        </div>
+      </div>
+    </div>
+    <div id="panel-area" style="display:none;"></div>
+  </main>
 </div>
 
+<div id="mobnav">
+  <div id="mnhdr">
+    <span class="logo">LINGUA <em>/ studio</em></span>
+    <button class="mn-x" id="mn-x">&#10005;</button>
+  </div>
+  <div id="mnlist"></div>
+</div>
 <script>
+
 // This file will be inlined into the HTML
 const DATA= {
   cafe: {
@@ -1444,43 +1385,9 @@ const DATA2= {
   }
 };
 
+
 </script>
-
 <script>
-// ── STATE ──
-let lang='es',lv='a2',sc=null,chatHist=[],_dlgs=[];
-let apiKey=localStorage.getItem('lingua_key')||'';
-
-// All scenario metadata
-const SC_META={
-  cafe:{name:'Café',icon:'☕'},
-  restaurant:{name:'Restaurant',icon:'🍽'},
-  grocery:{name:'Grocery',icon:'🛒'},
-  clothes:{name:'Clothes Shop',icon:'👗'},
-  cooking:{name:'Cooking',icon:'🔪'},
-  friends:{name:'Meeting Friends',icon:'🤝'},
-  nail:{name:'Nail Salon',icon:'💅'},
-  massage:{name:'Massage',icon:'💆'},
-  health:{name:'Health / Doctor',icon:'🏥'},
-  apartment:{name:'Apartment Hunting',icon:'🏠'},
-  landlord:{name:'Talking to Landlord',icon:'🔧'},
-  directions:{name:'Asking Directions',icon:'🗺'},
-  driving:{name:'Driving / Car',icon:'🚗'},
-  taxi:{name:'Taxi / Cab',icon:'🚕'},
-  airport:{name:'Airport',icon:'✈️'},
-  hotel:{name:'Hotel',icon:'🏨'},
-  train:{name:'Train / Tickets',icon:'🚄'},
-  cinema:{name:'Cinema',icon:'🎬'},
-  weather:{name:'Weather',icon:'🌤'},
-  biztrip:{name:'Business Trip',icon:'💼'},
-  office:{name:'Office',icon:'🖥'},
-  architecture:{name:'Architecture Studio',icon:'📐'},
-  design_class:{name:'Design Class',icon:'🎓'},
-  interior:{name:'Interior Design',icon:'🛋'},
-  police:{name:'Police / Emergency',icon:'🚔'}
-};
-
-// Merge all data sources
 const BATCH1 = {
 grocery:{name:"Grocery",icon:"🛒",
 es:{
@@ -4409,10 +4316,8 @@ tips:[
 {t:"Traffic accidents in China: call <strong>120</strong> for injuries, <strong>122</strong> for traffic police. Do not move injured people unless there is immediate danger. Take photos of the scene before vehicles are moved."}
 ]}}
 };
-
-const ALL = {...(typeof DATA!=='undefined'?DATA:{}), ...(typeof DATA2!=='undefined'?DATA2:{}), ...(typeof BATCH1!=='undefined'?BATCH1:{}), ...(typeof BATCH2!=='undefined'?BATCH2:{})}
-
-// ── B1 STATIC DATA ──
+</script>
+<script>
 const B1_DAILY_LIFE = {
 cafe:{name:"Café",icon:"☕",
 es:{
@@ -5505,8 +5410,7 @@ tips:[
 {t:"<strong>Chinese friendship communication</strong> often happens in bursts — long periods of silence followed by intensive contact. This isn't considered rude. Asking <strong>'怎么突然掉线了'</strong> (why did you go quiet) acknowledges the pattern without blaming."},
 {t:"<strong>破防 (pò fáng)</strong> — 'defense broken' — describes the moment something deeply moves you or catches you off guard emotionally. <strong>'这句话真的破防了'</strong> (this really got to me) is a highly contemporary way to express being emotionally touched."},
 {t:"<strong>Checking in on friends</strong> — <strong>'打扰了，就是想看看你'</strong> (sorry to bother you, just wanted to check in) is a disarmingly gentle message that carries enormous warmth in Chinese friendship culture. It acknowledges you're not the priority but you care anyway."}
-]}},
-};
+]}}};
 
 const B1_WELLNESS_HOME = {
 nail:{name:"Nail Salon",icon:"💅",
@@ -7191,7 +7095,7 @@ tips:[
 {t:"<strong>Gate opening times</strong> — Chinese stations open gates exactly 30 minutes before departure and close 5 minutes before. Build in time for this."},
 {t:"<strong>Seat classes</strong> — 二等座 comfortable for up to 4 hours. 一等座 worth it for 5+ hours. 商务座 is genuine business class."},
 {t:"<strong>Missed connection due to delay</strong> — go to the service desk (服务台) at arrival station with your ticket and ID. Chinese rail will rebook you for free."}
-]}},,
+]}},
 cinema:{name:"Cinema",icon:"🎬",
 es:{
 vocab:[
@@ -8432,489 +8336,336 @@ tips:[
 {t:"<strong>Foreign passport holders</strong> are entitled to consular notification if detained. Say: <strong>我要求通知我国领事馆</strong>. This is your legal right under the Vienna Convention."},
 {t:"<strong>反诈平台</strong> (anti-fraud platform) at 110.com allows online reporting of fraud cases. Often faster than going to the station in person for online scams."},
 {t:"<strong>Personal safety</strong> — if followed or threatened, entering any staffed public building (hotel lobby, mall, convenience store) and asking staff for help is the fastest practical response. Call 110 immediately in genuine danger."}
-]}
+]}}
 };
+</script>
+<script>
+const ALL = {...(typeof DATA!=="undefined"?DATA:{}),...(typeof DATA2!=="undefined"?DATA2:{}),...(typeof BATCH1!=="undefined"?BATCH1:{}),...(typeof BATCH2!=="undefined"?BATCH2:{})};
+// ── STATE ──────────────────────────────────────────────
+let lang = 'es', lv = 'a2', sc = null;
+let chatHist = [];
+let apiKey = localStorage.getItem('lingua_key') || '';
+let tabCache = {};
 
-const ALL_B1={...(typeof B1_DAILY_LIFE!=='undefined'?B1_DAILY_LIFE:{}),...(typeof B1_WELLNESS_HOME!=='undefined'?B1_WELLNESS_HOME:{}),...(typeof B1_TRAVEL_PROFESSIONAL_CIVIC!=='undefined'?B1_TRAVEL_PROFESSIONAL_CIVIC:{})};
-;
-
-// ── LANG / LEVEL ──
-function setLang(l){
-  lang=l;
-  document.getElementById('bes').className=l==='es'?'tbtn aes':'tbtn';
-  document.getElementById('bzh').className=l==='zh'?'tbtn azh':'tbtn';
-  document.getElementById('app').className=l==='zh'?'zh':'';
-  if(sc) go(sc);
-}
-function setLv(l){
-  lv=l;
-  ['a2','b1','b2'].forEach(x=>{document.getElementById('l'+x).className=x===l?'tbtn alv':'tbtn';});
-  // Update the meta label if a panel is open
-  const metaEl=document.querySelector('.p-meta');
-  if(metaEl){
-    const lvL={a2:'A2 — Beginner',b1:'B1 — Intermediate',b2:'B2+ — Advanced'}[l];
-    const langL=lang==='es'?'Español':'普通话';
-    metaEl.textContent=langL+' · '+lvL;
-  }
-  // Reload whichever tab is currently visible (level change = new content needed)
-  const activeTab=document.querySelector('.tab.on');
-  if(activeTab&&sc){
-    const tabId=activeTab.id.replace('tab-','');
-    const tabName={vocab:'vocab',phrases:'phrases','dlg':'dialogues',prac:'practice',tips:'tips'}[tabId]||tabId;
-    showTab(tabName);
-  }
-}
-
-// ── NAVIGATION ──
-function go(id){
-  sc=id; chatHist=[]; _dlgs=[];
-  document.getElementById('welcome').style.display='none';
-  document.querySelectorAll('.s-btn').forEach(b=>b.classList.toggle('on',b.getAttribute('onclick').includes("'"+id+"'")));
-  const pa=document.getElementById('panel-area');
-  pa.style.display='block';
-  const m=SC_META[id]||{name:id,icon:'◆'};
-  const lvL={a2:'A2 — Beginner',b1:'B1 — Intermediate',b2:'B2+ — Advanced'}[lv];
-  const langL=lang==='es'?'Español':'普通话';
-  pa.innerHTML=`<div class="panel">
-    <div class="p-hdr"><span class="p-title">${m.icon} ${m.name}</span><span class="p-meta">${langL} · ${lvL}</span></div>
-    <div class="tabs">
-      <button class="tab" onclick="showTab('vocab')" id="tab-vocab">Vocabulary</button>
-      <button class="tab" onclick="showTab('phrases')" id="tab-phrases">Phrases</button>
-      <button class="tab" onclick="showTab('dialogues')" id="tab-dlg">Dialogues</button>
-      <button class="tab" onclick="showTab('practice')" id="tab-prac">Practice</button>
-      <button class="tab" onclick="showTab('tips')" id="tab-tips">Notes</button>
-    </div>
-    <div class="tc" id="tc-vocab"></div>
-    <div class="tc" id="tc-phrases"></div>
-    <div class="tc" id="tc-dlg"></div>
-    <div class="tc" id="tc-prac"></div>
-    <div class="tc" id="tc-tips"></div>
-  </div>`;
-  showTab('vocab');
-}
-
-function showTab(tab){
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
-  document.querySelectorAll('.tc').forEach(c=>c.classList.remove('vis'));
-  const tid={vocab:'tab-vocab',phrases:'tab-phrases',dialogues:'tab-dlg',practice:'tab-prac',tips:'tab-tips'}[tab];
-  const cid={vocab:'tc-vocab',phrases:'tc-phrases',dialogues:'tc-dlg',practice:'tc-prac',tips:'tc-tips'}[tab];
-  document.getElementById(tid).classList.add('on');
-  document.getElementById(cid).classList.add('vis');
-  if(tab==='practice'){renderPractice(document.getElementById(cid));return;}
-  loadTab(tab,document.getElementById(cid));
-}
-
-// ── LEVEL-AWARE TAB LOADER ──
-// Cache: key = sc|lang|lv|tab  →  rendered HTML string
-const tabCache={};
-
-async function loadTab(tab,el){
-  const cacheKey=`${sc}|${lang}|${lv}|${tab}`;
-  if(tabCache[cacheKey]){
-    el.innerHTML=tabCache[cacheKey];
-    if(tab==='dialogues') restoreDlgState(el);
-    return;
-  }
-  // A2 with static data available → render immediately, no API needed
-  if(lv==='a2'||lv==='b1'){
-    const d=getStaticD();
-    if(d){
-      renderFromData(tab,el,d);
-      tabCache[cacheKey]=el.innerHTML;
-      return;
+// ── DATA LOOKUP ─────────────────────────────────────────
+function getData(scenarioId) {
+  // B1: try B1 data first
+  if (lv === 'b1') {
+    const b1src = [
+      typeof B1_DAILY_LIFE !== 'undefined' ? B1_DAILY_LIFE : {},
+      typeof B1_WELLNESS_HOME !== 'undefined' ? B1_WELLNESS_HOME : {},
+      typeof B1_TRAVEL_PROFESSIONAL_CIVIC !== 'undefined' ? B1_TRAVEL_PROFESSIONAL_CIVIC : {}
+    ];
+    for (const src of b1src) {
+      if (src[scenarioId] && src[scenarioId][lang]) {
+        return src[scenarioId][lang];
+      }
     }
   }
-  // B1 / B2+, or A2 with no static data → need API
-  if(!apiKey){
-    el.innerHTML=`<div style="padding:20px;color:var(--txm);font-size:11px;line-height:1.8;">
-      <strong style="color:var(--tx);">${lv==='a2'?'No static content yet':'Level ${lv.toUpperCase()} requires your API key'}</strong><br>
-      ${lv==='a2'?'This scenario doesn\'t have hardcoded content yet.':'B1 and B2+ content is generated fresh via the Anthropic API — calibrated to your exact level.'}
-      Enter your API key in the <strong>Practice</strong> tab to unlock all levels for every scenario.</div>`;
-    return;
-  }
-  // Show spinner while generating
-  const accentCls=lang==='es'?'d-es':'d-zh';
-  el.innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;padding:40px;gap:12px;">
-    <div style="display:flex;gap:5px;"><div class="ld ${accentCls}"></div><div class="ld ${accentCls}"></div><div class="ld ${accentCls}"></div></div>
-    <div style="font-size:10px;color:var(--txm);letter-spacing:.1em;">Generating ${lv.toUpperCase()} content…</div>
-  </div>`;
-  const data=await fetchLevelContent(tab);
-  if(data._error){
-    el.innerHTML=`<div style="padding:20px;color:var(--txm);font-size:11px;">${data._error}
-      <br><button onclick="loadTab('${tab}',this.closest('.tc'))" style="margin-top:10px;padding:4px 12px;background:transparent;border:1px solid var(--bor);color:var(--txm);font-family:var(--mono);font-size:10px;cursor:pointer;">Retry</button></div>`;
-    return;
-  }
-  renderFromData(tab,el,data);
-  tabCache[cacheKey]=el.innerHTML;
+  // A2 fallback (also used for B2+ until B2 data exists)
+  const src = typeof ALL !== 'undefined' ? ALL : {};
+  return (src[scenarioId] || {})[lang] || null;
 }
 
-function getStaticD(){
-  if(lv==='b1'){
-    const b=(typeof ALL_B1!=='undefined')&&ALL_B1[sc];
-    if(b) return b[lang]||null;
-  }
-  const src=ALL[sc];
-  if(!src) return null;
-  return src[lang]||null;
+// ── LEVEL & LANG SWITCHERS ──────────────────────────────
+function setLv(v) {
+  lv = v;
+  tabCache = {};
+  ['a2','b1','b2'].forEach(x => {
+    document.getElementById('btn-' + x).className = (x === v) ? 'btn on-lv' : 'btn';
+  });
+  if (sc) go(sc);
 }
 
-function renderFromData(tab,el,d){
-  if(tab==='vocab') renderVocab(el,d.vocab||d.items||[]);
-  else if(tab==='phrases') renderPhrases(el,d.phrases||d.items||[]);
-  else if(tab==='dialogues') renderDlgs(el,d.dialogues||[]);
-  else if(tab==='tips') renderTips(el,d.tips||[]);
+function setLang(l) {
+  lang = l;
+  tabCache = {};
+  document.getElementById('btn-es').className = (l === 'es') ? 'btn on-es' : 'btn';
+  document.getElementById('btn-zh').className = (l === 'zh') ? 'btn on-zh' : 'btn';
+  // Toggle zh class for color theming
+  const app = document.getElementById('app');
+  if (l === 'zh') app.classList.add('zh'); else app.classList.remove('zh');
+  if (sc) go(sc);
 }
 
-function restoreDlgState(el){
-  // Re-attach _dlgs from rendered HTML isn't possible cleanly,
-  // so we just re-render dialogues from cache-safe stored data
-}
-
-// ── API CONTENT GENERATION FOR B1 / B2+ ──
-const LV_DESC={
-  a2:'A2 beginner: simple present/past tense, basic vocabulary (≤1500 words), short sentences, no idioms',
-  b1:'B1 intermediate: varied tenses including future and conditional, some common idioms and colloquialisms, moderate sentence complexity, register awareness',
-  b2:'B2+ advanced: full idiomatic speech, colloquialisms, complex grammar including subjunctive (Spanish) or aspect markers (Chinese), cultural nuance, natural native register — nothing simplified'
+// ── SCENARIO METADATA ───────────────────────────────────
+const SC_META = {
+  cafe:{name:'Café',icon:'☕'}, restaurant:{name:'Restaurant',icon:'🍽'},
+  grocery:{name:'Grocery',icon:'🛒'}, clothes:{name:'Clothes Shop',icon:'👗'},
+  cooking:{name:'Cooking',icon:'🔪'}, friends:{name:'Meeting Friends',icon:'🤝'},
+  nail:{name:'Nail Salon',icon:'💅'}, massage:{name:'Massage',icon:'💆'},
+  health:{name:'Health / Doctor',icon:'🏥'},
+  apartment:{name:'Apartment Hunting',icon:'🏠'}, landlord:{name:'Talking to Landlord',icon:'🔑'},
+  directions:{name:'Directions',icon:'🗺'}, driving:{name:'Driving / Car',icon:'🚗'},
+  taxi:{name:'Taxi',icon:'🚕'},
+  airport:{name:'Airport',icon:'✈️'}, hotel:{name:'Hotel',icon:'🏨'},
+  train:{name:'Train / Tickets',icon:'🚄'}, cinema:{name:'Cinema',icon:'🎬'},
+  weather:{name:'Weather',icon:'🌤'}, biztrip:{name:'Business Trip',icon:'💼'},
+  office:{name:'Office',icon:'🖥'}, architecture:{name:'Architecture Studio',icon:'📐'},
+  design_class:{name:'Design Class',icon:'🎓'}, interior:{name:'Interior Design',icon:'🛋'},
+  police:{name:'Police / Emergency',icon:'🚔'}
 };
 
-const LV_DIFF={
-  b1:{
-    es:'Include some idiomatic expressions Spaniards actually use. Vary tenses. Add register notes explaining when something sounds formal vs casual.',
-    zh:'Include colloquial expressions common in daily speech. Vary aspects and modal particles. Note tonal or register differences where relevant.'
-  },
-  b2:{
-    es:'Use fully natural Castilian Spanish including subjunctive, colloquialisms, regional expressions. No simplification whatsoever. The learner should feel genuine challenge.',
-    zh:'Use natural spoken Mandarin including particles like 呢/嘛/嘛/吧 in context, chengyu where natural, colloquial contractions. No simplification. Challenge the learner.'
-  }
-};
+// ── GO (load a scenario) ─────────────────────────────────
+function go(id) {
+  sc = id;
+  chatHist = [];
 
-async function fetchLevelContent(tab){
-  const m=SC_META[sc]||{name:sc};
-  const langFull=lang==='es'?'Spanish (Spain, Castilian)':'Mandarin Chinese (Simplified, Mainland)';
-  const lvDesc=LV_DESC[lv];
-  const lvDiff=lv!=='a2'?(LV_DIFF[lv]||{})[lang]||'':''  ;
-  const zhRule=lang==='zh'
-    ?"MANDATORY: every single Chinese item MUST have a 'pinyin' field with full tone-marked pinyin. No exceptions."
-    :"Do not include a pinyin field for Spanish items.";
+  // Hide welcome, show panel area
+  document.getElementById('welcome').style.display = 'none';
+  const pa = document.getElementById('panel-area');
+  pa.style.display = 'block';
 
-  const prompts={
-    vocab:`Generate exactly 20 vocabulary items for the scenario: "${m.name}".
-Language: ${langFull}. Level: ${lvDesc}.
-${lvDiff}
-${zhRule}
-Return ONLY valid JSON, no markdown fences, no explanation:
-{"vocab":[{"w":"target word/phrase","py":"pinyin if Chinese","t":"English translation"}]}
-Rules: practical words used in THIS scenario. Most useful first. No duplicates. At ${lv}: ${lv==='b1'?'include some less obvious vocabulary beyond the basics':'push into advanced vocabulary, fixed expressions, culturally-loaded terms'}.`,
+  // Update sidebar active state
+  document.querySelectorAll('.s-btn').forEach(b => {
+    const match = (b.getAttribute('onclick') || '').includes("'" + id + "'");
+    b.classList.toggle('on', match);
+  });
 
-    phrases:`Generate exactly 20 phrases for the scenario: "${m.name}".
-Language: ${langFull}. Level: ${lvDesc}.
-${lvDiff}
-${zhRule}
-Return ONLY valid JSON:
-{"phrases":[{"p":"phrase","py":"pinyin if Chinese","t":"English translation","c":"one-line note: what makes this phrasing native/natural, register, or when to use it"}]}
-At ${lv}: ${lv==='b1'?'include idiomatic alternatives to textbook phrasing, explain register differences':'use fully natural speech, include phrases that reveal mastery — things a textbook would never teach'}.`,
+  // Build panel HTML
+  const m = SC_META[id] || {name: id, icon: '◆'};
+  const lvLabel = {a2:'A2 — Beginner', b1:'B1 — Intermediate', b2:'B2+ — Advanced'}[lv];
+  const langLabel = lang === 'es' ? 'Español' : '普通话';
 
-    dialogues:`Generate 5 distinct realistic dialogues for the scenario: "${m.name}".
-Language: ${langFull}. Level: ${lvDesc}.
-${lvDiff}
-${zhRule} — pinyin required on EVERY line without exception.
-Each dialogue: a different sub-situation within the scenario, 5-7 exchanges.
-Return ONLY valid JSON:
-{"dialogues":[{"setup":"one sentence describing the situation","lines":[{"sp":"STAFF or YOU or NAME","t":"text","py":"pinyin if Chinese","n":"English translation or brief note"}]}]}
-At ${lv}: ${lv==='b1'?'include natural filler words, hedging, and casual connectors real speakers use':'make dialogues indistinguishable from authentic native speech — include interruptions, topic shifts, cultural subtext'}.`,
-
-    tips:`Generate 6 sharp, practical notes for the scenario: "${m.name}".
-Language: ${langFull}. Level: ${lvDesc}.
-Return ONLY valid JSON:
-{"tips":[{"t":"tip text with <strong> tags on key terms"}]}
-At ${lv}: ${lv==='b1'?'focus on common errors at intermediate level, register traps, and what separates B1 from native-sounding speech':'focus on advanced nuance — things that distinguish a B2 speaker from a near-native, cultural depth, edge cases'}.
-No generic language learning advice. Specific to THIS scenario and THIS language only.`
-  };
-
-  try{
-    const r=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'x-api-key':apiKey,
-        'anthropic-version':'2023-06-01',
-        'anthropic-dangerous-direct-browser-access':'true'
-      },
-      body:JSON.stringify({
-        model:'claude-haiku-4-5-20251001',
-        max_tokens:3500,
-        messages:[{role:'user',content:prompts[tab]}]
-      })
-    });
-    const data=await r.json();
-    if(data.error) return {_error:'API error: '+data.error.message};
-    const raw=data.content?.[0]?.text||'{}';
-    const clean=raw.replace(/```json|```/g,'').trim();
-    return JSON.parse(clean);
-  }catch(e){
-    return {_error:'Generation failed. Check your API key and connection.'};
-  }
-}
-
-function renderVocab(el,items){
-  el.innerHTML=`<div class="vgrid">${items.map(v=>`
-    <div class="vc" onclick="sp('${esc(v.w)}')">
-      <span class="vw">${v.w}</span>
-      ${v.py?`<span class="vpy">${v.py}</span>`:''}
-      <span class="vtr">${v.t}</span>
-      <span class="v-spk">▶</span>
-    </div>`).join('')}</div>
-  <div class="hint">Click card to hear · Hover to reveal translation</div>`;
-}
-
-function renderPhrases(el,items){
-  el.innerHTML=items.map(p=>`
-    <div class="ph" onclick="sp('${esc(p.p)}')">
-      <span class="php">${p.p}</span>
-      ${p.py?`<span class="phpy">${p.py}</span>`:''}
-      <span class="pht">${p.t}</span>
-      <span class="phc">${p.c}</span>
-    </div>`).join('');
-}
-
-function renderDlgs(el,dlgs){
-  _dlgs=dlgs;
-  el.innerHTML=dlgs.map((d,i)=>`
-    <div class="dlg">
-      <div class="dlgn">DIALOGUE ${i+1} / ${dlgs.length}</div>
-      <div class="dlgs">${d.setup}</div>
-      ${d.lines.map(l=>`
-        <div class="dlgline">
-          <span class="dlgsp ${l.sp==='YOU'?'you':''}">${l.sp}</span>
-          <div class="dlgtx">
-            <span class="dlgm" onclick="sp('${esc(l.t)}')">${l.t} <span style="font-size:9px;opacity:.25;">▶</span></span>
-            ${l.py?`<span class="dlgpy">${l.py}</span>`:''}
-            ${l.n?`<span class="dlgno">${l.n}</span>`:''}
-          </div>
-        </div>`).join('')}
-      <div class="dlg-btns">
-        <button class="dlg-btn" onclick="playDlg(${i},this)">▶ Play dialogue</button>
-        <button class="dlg-btn" onclick="stopAudio()">■ Stop</button>
+  pa.innerHTML = `
+    <div class="panel">
+      <div class="p-hdr">
+        <span class="p-title">${m.icon} ${m.name}</span>
+        <span class="p-meta">${langLabel} · ${lvLabel}</span>
       </div>
-    </div>`).join('');
-}
-
-function renderPractice(el){
-  const m=SC_META[sc]||{name:sc};
-  if(!apiKey){
-    el.innerHTML=`<div class="chat-wrap">
-      <div class="chat-lbl">Live Practice — ${m.name}</div>
-      <div class="no-key">Practice requires an Anthropic API key. Enter it above to enable live conversation with corrections.</div>
-      <div class="key-banner" style="margin:12px 0 0;border:none;padding:0;background:none;">
-        <input id="key-inline" placeholder="sk-ant-..." onkeydown="if(event.key==='Enter')saveKey()">
-        <button onclick="saveKey()">Save Key</button>
+      <div class="tabs">
+        <button class="tab" id="t-vocab" onclick="showTab('vocab')">Vocabulary</button>
+        <button class="tab" id="t-phrases" onclick="showTab('phrases')">Phrases</button>
+        <button class="tab" id="t-dialogues" onclick="showTab('dialogues')">Dialogues</button>
+        <button class="tab" id="t-practice" onclick="showTab('practice')">Practice</button>
+        <button class="tab" id="t-tips" onclick="showTab('tips')">Notes</button>
       </div>
-      <div style="font-size:10px;color:var(--txd);margin-top:8px;">Key stored locally in your browser. Not sent anywhere except Anthropic's API.</div>
+      <div class="tc" id="c-vocab"></div>
+      <div class="tc" id="c-phrases"></div>
+      <div class="tc" id="c-dialogues"></div>
+      <div class="tc" id="c-practice"></div>
+      <div class="tc" id="c-tips"></div>
     </div>`;
-    return;
+
+  showTab('vocab');
+  document.querySelector('.main').scrollTop = 0;
+}
+
+// ── TAB SWITCHING ────────────────────────────────────────
+function showTab(tab) {
+  const tabs = ['vocab','phrases','dialogues','practice','tips'];
+  tabs.forEach(t => {
+    const tb = document.getElementById('t-' + t);
+    const tc = document.getElementById('c-' + t);
+    if (tb) tb.classList.toggle('on', t === tab);
+    if (tc) tc.classList.toggle('vis', t === tab);
+  });
+  if (tab === 'practice') { renderPractice(); return; }
+  loadTab(tab);
+}
+
+function loadTab(tab) {
+  const el = document.getElementById('c-' + tab);
+  if (!el) return;
+  const key = sc + '|' + lang + '|' + lv + '|' + tab;
+  if (tabCache[key]) { el.innerHTML = tabCache[key]; return; }
+  const d = getData(sc);
+  if (d) {
+    renderTab(tab, el, d);
+    tabCache[key] = el.innerHTML;
+  } else {
+    el.innerHTML = '<div style="padding:20px;color:var(--txm);font-size:11px;">No data for this scenario at this level yet.</div>';
   }
-  el.innerHTML=`<div class="chat-wrap">
-    <div class="chat-lbl">Live Roleplay — ${m.name}</div>
-    <div class="msgs" id="chat-msgs">
-      <div class="msg msg-sys">Start the conversation. The AI plays a native speaker in this scenario and corrects errors in context.</div>
-    </div>
-    <div class="chat-row">
-      <input class="chat-in" id="chat-in" placeholder="Type in ${lang==='es'?'Spanish or English':'Chinese or English'}..." onkeydown="if(event.key==='Enter')doChat()">
-      <button class="chat-go" onclick="doChat()" id="chat-btn">Send</button>
-    </div>
-    <div class="chat-hint">Errors corrected at end of response. Type naturally.</div>
-  </div>`;
 }
 
-function renderTips(el,tips){
-  el.innerHTML=`<div class="tips">${tips.map((t,i)=>`
-    <div class="tip"><span class="tipn">0${i+1}</span><span class="tipt">${t.t}</span></div>`).join('')}</div>`;
-}
-
-// ── API KEY ──
-function saveKey(){
-  const inp=document.getElementById('key-inline');
-  if(inp&&inp.value.trim()){
-    apiKey=inp.value.trim();
-    localStorage.setItem('lingua_key',apiKey);
-    if(sc) showTab('practice');
+// ── RENDERERS ────────────────────────────────────────────
+function renderTab(tab, el, d) {
+  if (tab === 'vocab') {
+    const items = d.vocab || d.items || [];
+    el.innerHTML = '<div class="vgrid">' + items.map(v =>
+      `<div class="vc" onclick="sp('${esc(v.w)}')">
+        <span class="vw">${v.w}</span>
+        ${v.py ? `<span class="vpy">${v.py}</span>` : ''}
+        <span class="vt">${v.t}</span>
+      </div>`
+    ).join('') + '</div><div style="font-size:9px;color:var(--txd);letter-spacing:.05em;">Hover to reveal translation · Click to hear</div>';
+  }
+  else if (tab === 'phrases') {
+    const items = d.phrases || d.items || [];
+    el.innerHTML = items.map(p =>
+      `<div class="pb" onclick="sp('${esc(p.p)}')">
+        <span class="pp">${p.p}</span>
+        ${p.py ? `<span class="ppy">${p.py}</span>` : ''}
+        <span class="pt">${p.t}</span>
+        <span class="pc">${p.c || p.ctx || ''}</span>
+      </div>`
+    ).join('');
+  }
+  else if (tab === 'dialogues') {
+    const items = d.dialogues || (d.dialogue ? [d.dialogue] : []);
+    el.innerHTML = items.map(dlg =>
+      `<div class="dlg">
+        <div class="dlg-setup">${dlg.setup || ''}</div>
+        ${(dlg.lines || []).map(l =>
+          `<div class="dlg-line">
+            <span class="dlg-sp ${(l.sp||l.speaker||'') === 'YOU' ? 'you' : ''}">${l.sp || l.speaker || ''}</span>
+            <div class="dlg-txt">
+              <span class="m">${l.t || l.text || ''}</span>
+              ${l.py || l.pinyin ? `<span class="py">${l.py || l.pinyin}</span>` : ''}
+              ${l.n || l.note ? `<span class="n">${l.n || l.note}</span>` : ''}
+            </div>
+          </div>`
+        ).join('')}
+      </div>`
+    ).join('');
+  }
+  else if (tab === 'tips') {
+    const items = d.tips || [];
+    el.innerHTML = '<div class="tips">' + items.map((tip, i) =>
+      `<div class="tip">
+        <span class="tip-n">0${i+1}</span>
+        <span class="tip-t">${tip.t}</span>
+      </div>`
+    ).join('') + '</div>';
   }
 }
 
-// ── TTS ──
-function getVoice(l){
-  const vs=speechSynthesis.getVoices();
-  const code=l==='zh'?'zh':'es';
-  return vs.find(v=>v.lang.startsWith(code)&&v.localService)||vs.find(v=>v.lang.startsWith(code))||null;
-}
-function sp(text){
-  if(!('speechSynthesis' in window))return;
-  speechSynthesis.cancel();
-  const u=new SpeechSynthesisUtterance(text);
-  const v=getVoice(lang);
-  if(v)u.voice=v;
-  u.lang=lang==='zh'?'zh-CN':'es-ES';
-  u.rate=0.78;u.pitch=1;
-  speechSynthesis.speak(u);
-}
-function stopAudio(){
-  speechSynthesis.cancel();
-  document.querySelectorAll('.dlg-btn.playing').forEach(b=>{b.classList.remove('playing');b.textContent='▶ Play dialogue';});
-}
-function playDlg(idx,btn){
-  stopAudio();
-  const d=_dlgs[idx];if(!d)return;
-  btn.classList.add('playing');btn.textContent='▶ Playing...';
-  let i=0;
-  function next(){
-    if(i>=d.lines.length){btn.classList.remove('playing');btn.textContent='▶ Play dialogue';return;}
-    const u=new SpeechSynthesisUtterance(d.lines[i].t);
-    const v=getVoice(lang);if(v)u.voice=v;
-    u.lang=lang==='zh'?'zh-CN':'es-ES';u.rate=0.75;
-    u.onend=()=>{i++;setTimeout(next,520);};
-    u.onerror=()=>{i++;setTimeout(next,80);};
-    speechSynthesis.speak(u);
-  }
-  next();
+// ── SPEECH ───────────────────────────────────────────────
+function sp(text) {
+  if (!window.speechSynthesis) return;
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = lang === 'es' ? 'es-ES' : 'zh-CN';
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(u);
 }
 
-// ── CHAT ──
-async function doChat(){
-  const inp=document.getElementById('chat-in');
-  const btn=document.getElementById('chat-btn');
-  const msgs=document.getElementById('chat-msgs');
-  if(!inp||!msgs||!apiKey)return;
-  const txt=inp.value.trim();if(!txt)return;
-  inp.value='';btn.disabled=true;
-  const uEl=document.createElement('div');uEl.className='msg msg-user';uEl.textContent=txt;msgs.appendChild(uEl);
-  chatHist.push({role:'user',content:txt});
-  const lEl=document.createElement('div');lEl.className='msg msg-ai';
-  lEl.innerHTML='<span class="ldots"><span class="ld"></span><span class="ld"></span><span class="ld"></span></span>';
-  msgs.appendChild(lEl);msgs.scrollTop=msgs.scrollHeight;
-  const m=SC_META[sc]||{name:sc,icon:''};
-  const lf=lang==='es'?'Spanish (Spain, Castilian)':'Mandarin Chinese (Simplified)';
-  const lvD={a2:'A2 beginner',b1:'B1 intermediate',b2:'B2+ advanced'}[lv];
-  const zh=lang==='zh'?'Add pinyin in brackets after all Chinese: 你好 (nǐ hǎo).':'';
-  const sys=`You are a native ${lf} speaker in a realistic roleplay. Scenario: ${m.name}. User level: ${lvD}.
-${zh}
-Rules: 1) Respond in ${lf}. If user writes English, translate your response after. 2) Match complexity to ${lvD}. 3) If user makes a language error, add ONLY at the very end: [Correction: "wrong" → "correct" — brief reason]. 4) Stay in character. Max 3 sentences per turn.`;
-  try{
-    const r=await fetch('https://api.anthropic.com/v1/messages',{
+function esc(s) {
+  return (s || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+}
+
+// ── PRACTICE (AI) ────────────────────────────────────────
+function renderPractice() {
+  const el = document.getElementById('c-practice');
+  if (!el) return;
+  const m = SC_META[sc] || {};
+  el.innerHTML = `
+    <div class="prac">
+      <div class="prac-title">Live Practice — ${m.name || sc}</div>
+      <div class="msgs" id="msgs"><div class="msg msg-sys">Type your first message to begin the roleplay.</div></div>
+      <div class="inp-row">
+        <input class="inp" id="inp" placeholder="${lang === 'es' ? 'Type in Spanish or English…' : 'Type in Chinese or English…'}" onkeydown="if(event.key==='Enter')send()">
+        <button class="send-btn" id="send-btn" onclick="send()">Send</button>
+      </div>
+      <div class="prac-hint">AI plays a native speaker in this scenario. Mistakes are corrected in context.</div>
+      ${!apiKey ? `<div style="margin-top:12px;padding:10px 12px;background:var(--sur2);border:1px solid var(--bor);font-size:10px;color:var(--txm);">
+        API key needed for practice. <input id="key-inp" placeholder="sk-ant-..." style="background:var(--bg);border:1px solid var(--bor);color:var(--tx);font-family:var(--mono);font-size:10px;padding:3px 8px;margin:0 6px;width:180px;outline:none;">
+        <button onclick="saveKey()" style="background:var(--es);border:none;color:var(--bg);font-family:var(--mono);font-size:9px;padding:4px 10px;cursor:pointer;">Save</button>
+      </div>` : ''}
+    </div>`;
+}
+
+function saveKey() {
+  const k = document.getElementById('key-inp').value.trim();
+  if (k) { apiKey = k; localStorage.setItem('lingua_key', k); renderPractice(); }
+}
+
+async function send() {
+  if (!apiKey) return;
+  const inp = document.getElementById('inp');
+  const btn = document.getElementById('send-btn');
+  const msgs = document.getElementById('msgs');
+  const text = inp.value.trim();
+  if (!text) return;
+  inp.value = ''; btn.disabled = true;
+
+  addMsg(msgs, 'msg-usr', text);
+  chatHist.push({role:'user', content:text});
+
+  const loader = addMsg(msgs, 'msg-ai', '<div class="ldots"><div class="ldot"></div><div class="ldot"></div><div class="ldot"></div></div>');
+  msgs.scrollTop = msgs.scrollHeight;
+
+  const m = SC_META[sc] || {};
+  const langFull = lang === 'es' ? 'Spanish (Spain, Castilian)' : 'Mandarin Chinese (Simplified)';
+  const d = getData(sc);
+  const setupCtx = d && d.dialogues && d.dialogues[0] ? d.dialogues[0].setup : (d && d.dialogue ? d.dialogue.setup : '');
+
+  const sys = `You are a native ${langFull} speaker in a roleplay: ${m.name} scenario.
+Context: ${setupCtx || 'A typical ' + (m.name || sc) + ' situation.'}
+Rules:
+1. Respond in ${langFull} primarily.
+2. If the user writes English: respond in ${langFull} first, then English translation in parentheses.
+3. If the user makes a language error: at the END add [Correction: "wrong" → "right" — brief reason]
+4. Stay in character. Keep it natural and realistic.
+${lang === 'zh' ? '5. Include pinyin for all Chinese text in brackets like: 你好 (nǐ hǎo).' : ''}`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
       method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:400,system:sys,messages:chatHist})
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:sys,messages:chatHist})
     });
-    const data=await r.json();
-    if(data.error){lEl.textContent='API error: '+data.error.message;btn.disabled=false;return;}
-    const ai=data.content?.[0]?.text||'...';
-    chatHist.push({role:'assistant',content:ai});
-    if(ai.includes('[Correction:')){
-      const [main,corr]=ai.split('[Correction:');
-      lEl.textContent=main.trim();
-      const cEl=document.createElement('div');cEl.className='msg-corr';cEl.textContent='Correction: '+corr.replace(']','').trim();msgs.appendChild(cEl);
-    }else{lEl.textContent=ai;}
-  }catch(e){lEl.textContent='Network error. Check your connection.';}
-  btn.disabled=false;msgs.scrollTop=msgs.scrollHeight;inp.focus();
+    const data = await res.json();
+    const reply = data.content?.[0]?.text || 'No response.';
+    chatHist.push({role:'assistant', content:reply});
+
+    if (reply.includes('[Correction:')) {
+      const parts = reply.split('[Correction:');
+      loader.className = 'msg msg-ai'; loader.textContent = parts[0].trim();
+      const fix = addMsg(msgs, 'msg-fix', '→ ' + parts[1].replace(']','').trim());
+    } else {
+      loader.className = 'msg msg-ai'; loader.textContent = reply;
+    }
+  } catch(e) {
+    loader.className = 'msg msg-ai'; loader.textContent = 'Connection error.';
+  }
+
+  btn.disabled = false;
+  msgs.scrollTop = msgs.scrollHeight;
+  inp.focus();
 }
 
-function esc(s){return(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'&quot;');}
-speechSynthesis.getVoices&&speechSynthesis.getVoices();
-if(speechSynthesis.onvoiceschanged!==undefined){speechSynthesis.onvoiceschanged=()=>speechSynthesis.getVoices();}
+function addMsg(container, cls, content) {
+  const d = document.createElement('div');
+  d.className = 'msg ' + cls;
+  d.innerHTML = content;
+  container.appendChild(d);
+  return d;
+}
 
-/* ── Mobile nav (iOS-safe) ── */
-(function(){
-  var nav   = document.getElementById('mobnav');
-  var list  = document.getElementById('mobnav-list');
-  var hbg   = document.getElementById('hbg');
-  var closeX= document.getElementById('mobnav-x');
+// ── MOBILE NAV ────────────────────────────────────────────
+(function() {
+  const nav = document.getElementById('mobnav');
+  const list = document.getElementById('mnlist');
+  const hbg = document.getElementById('hbg');
+  const mnx = document.getElementById('mn-x');
 
-  // Clone desktop sidebar sections into mob-nav list
-  var sidebar = document.querySelector('.sidebar');
-  if(sidebar && list){
-    list.innerHTML = sidebar.innerHTML;
-    // Remove onclick attrs — handled by delegation below
-    list.querySelectorAll('[onclick]').forEach(function(el){
-      el.removeAttribute('onclick');
+  // Clone sidebar into mobile nav
+  const sidebar = document.getElementById('sidebar');
+  if (sidebar && list) list.innerHTML = sidebar.innerHTML;
+
+  function openNav() {
+    // Sync active state
+    list.querySelectorAll('.s-btn').forEach(b => {
+      const id = (b.getAttribute('onclick') || '').match(/go\('([^']+)'\)/);
+      if (id) b.classList.toggle('on', id[1] === sc);
     });
+    nav.classList.add('open');
+    document.body.style.overflow = 'hidden';
   }
-
-  function syncActive(){
-    list.querySelectorAll('.s-btn').forEach(function(b){
-      b.classList.toggle('on', b.dataset.sc === sc);
-    });
-    // Copy lang class for colour theming
-    nav.className = nav.className.replace(/\bzh\b/,'').trim();
-    if(lang==='zh') nav.classList.add('zh');
-  }
-
-  function openNav(){
-    if(!nav.classList.contains('open')){
-      syncActive();
-      nav.classList.add('open');
-      document.body.style.overflow='hidden';
-    }
-  }
-  function closeNav(){
+  function closeNav() {
     nav.classList.remove('open');
-    document.body.style.overflow='';
+    document.body.style.overflow = '';
   }
 
-  // Tag each s-btn with data-sc so we can sync .on without parsing onclick
-  if(list){
-    list.querySelectorAll('.s-btn').forEach(function(b){
-      // Original onclick was e.g. onclick="go('cafe')" — extract id from text or icon
-      // We'll match by the scenario name via the desktop sidebar's onclick before removal
-      // (already removed above) — so we need another approach:
-      // Re-read the desktop sidebar original onclick before removal
-    });
-  }
+  if (hbg) hbg.addEventListener('click', openNav);
+  if (mnx) mnx.addEventListener('click', closeNav);
 
-  // Better: re-clone AFTER tagging
-  if(sidebar && list){
-    list.innerHTML = '';
-    sidebar.querySelectorAll('.s-sec').forEach(function(sec){
-      var clone = sec.cloneNode(true);
-      clone.querySelectorAll('.s-btn').forEach(function(b){
-        var m = (b.getAttribute('onclick')||'').match(/go\('([^']+)'\)/);
-        if(m){
-          b.dataset.sc = m[1];
-          b.removeAttribute('onclick');
-        }
-      });
-      list.appendChild(clone);
-    });
-  }
-
-  if(hbg)   hbg.addEventListener('click',   openNav);
-  if(closeX) closeX.addEventListener('click', closeNav);
-
-  if(list){
-    list.addEventListener('click', function(e){
-      var btn = e.target.closest('.s-btn');
-      if(!btn || !btn.dataset.sc) return;
-      var id = btn.dataset.sc;
-      closeNav();
-      // Small delay so nav close animation starts before panel renders
-      setTimeout(function(){ go(id); }, 30);
-    });
-  }
-
-  // Patch go() to keep mob-nav .on in sync
-  var _origGo = go;
-  go = function(id){
-    _origGo(id);
-    if(list){
-      list.querySelectorAll('.s-btn').forEach(function(b){
-        b.classList.toggle('on', b.dataset.sc === id);
-      });
-    }
-    if(lang==='zh') nav.classList.add('zh');
-    else nav.classList.remove('zh');
-  };
+  list.addEventListener('click', function(e) {
+    const btn = e.target.closest('.s-btn');
+    if (!btn) return;
+    const m = (btn.getAttribute('onclick') || '').match(/go\('([^']+)'\)/);
+    if (m) { closeNav(); setTimeout(() => go(m[1]), 30); }
+  });
 })();
-
 </script>
 
-<div id="mobnav"><div id="mobnav-hdr"><span class="logo">LINGUA</span><button class="mobnav-x" id="mobnav-x" aria-label="Close">&#10005;</button></div><div id="mobnav-list"></div></div>
-</body>
-</html>
